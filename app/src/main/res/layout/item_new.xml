@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="news"
+            type="com.valera.tz_news.models.MyNews" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:elevation="5dp"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/titan_one"
+                android:text="@{news.title}"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/txtAnnotation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{news.annotation}"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/butHide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="Скрыть" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>
