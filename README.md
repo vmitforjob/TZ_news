@@ -1,6 +1,6 @@
 # TZ_news
 
-<img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182542_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182558_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182603_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182608_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182608_%20.jpg" width="240" height="500"/>   
+<img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182542_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182558_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182603_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182608_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182615_%20.jpg" width="240" height="500"/>   
 
 Необходимо реализовать одностраничное приложение, работающее по следующему принципу:
 
