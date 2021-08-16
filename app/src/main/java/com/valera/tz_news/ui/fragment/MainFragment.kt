@@ -1,7 +1,10 @@
-package com.valera.tz_news
+package com.valera.tz_news.ui.fragment
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -9,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.valera.tz_news.R
 import com.valera.tz_news.api.ApiNews
 import com.valera.tz_news.db.AppDataBase
 import com.valera.tz_news.models.MyNews
@@ -26,11 +30,12 @@ class MainFragment : Fragment(R.layout.fragment_main), RecyclerViewClickListener
     lateinit private var viewModel: MainViewModel
     lateinit var newsAdapter: NewsAdapter
 
-    var lastPosition = 0
+    var lastOffset = 0
+    var lastPosition:Int = 0
+
     companion object {
         const val NEWS_URL = "NEWS_URL"
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -48,12 +53,6 @@ class MainFragment : Fragment(R.layout.fragment_main), RecyclerViewClickListener
             DBRepository(AppDataBase.invoke(requireContext()))
         )
 
-        recycler_view_news.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-        })
-
         viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
         viewModel.getNewsDB()
         viewModel.newsDB.observe(viewLifecycleOwner, { response ->
@@ -64,6 +63,7 @@ class MainFragment : Fragment(R.layout.fragment_main), RecyclerViewClickListener
                         it.setHasFixedSize(true)
                         it.adapter = NewsAdapter(response.data!!, this)
                         newsAdapter = it.adapter as NewsAdapter
+                        (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(lastPosition, lastOffset)
                     }
                 }
                 is Resource.Error -> { }
@@ -71,6 +71,17 @@ class MainFragment : Fragment(R.layout.fragment_main), RecyclerViewClickListener
             }
 
         })
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val  topView = (recycler_view_news.layoutManager as LinearLayoutManager).getChildAt(0)
+        if (topView != null)
+        {
+            lastOffset = topView.top
+            lastPosition = (recycler_view_news.layoutManager as LinearLayoutManager).getPosition(topView)
+        }
     }
 
     override fun onRecyclerViewItemClick(view: View, data: MyNews) {

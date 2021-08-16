@@ -1,6 +1,5 @@
 package com.valera.tz_news.ui
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -66,11 +65,9 @@ class NewsAdapter(
                                 .contains(charSequence.toString().toLowerCase()) || row.annotation.toLowerCase()
                                 .contains(charSequence.toString().toLowerCase())
                         ) {
-                            Log.d("TTTT","row title: ${row.title} | row.annotation ${row.annotation}")
                             filterList.add(row)
                         }
                     }
-                    Log.d("TTTT","filteredList: ${filterList.size} ")
                 }
                 val filterResults = FilterResults()
                 filterResults.values = filterList

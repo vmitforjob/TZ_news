@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/webViewFragment"
-        android:name="com.valera.tz_news.WebViewFragment"
+        android:name="com.valera.tz_news.ui.fragment.WebViewFragment"
         android:label="fragment_web_view"
         tools:layout="@layout/fragment_web_view" />
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.valera.tz_news.MainFragment"
+        android:name="com.valera.tz_news.ui.fragment.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action

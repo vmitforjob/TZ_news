@@ -1,7 +1,6 @@
-package com.valera.tz_news
+package com.valera.tz_news.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -11,6 +10,7 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.valera.tz_news.R
 
 class WebViewFragment : Fragment(R.layout.fragment_web_view) {
 
