@@ -9,7 +9,11 @@
         android:id="@+id/webViewFragment"
         android:name="com.valera.tz_news.ui.fragment.WebViewFragment"
         android:label="fragment_web_view"
-        tools:layout="@layout/fragment_web_view" />
+        tools:layout="@layout/fragment_web_view" >
+        <action
+            android:id="@+id/action_webViewFragment_to_hideNewsFragment"
+            app:destination="@id/hideNewsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.valera.tz_news.ui.fragment.MainFragment"
@@ -22,5 +26,20 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_hideNewsFragment"
+            app:destination="@id/hideNewsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hideNewsFragment"
+        android:name="com.valera.tz_news.ui.fragment.HideNewsFragment"
+        android:label="fragment_hide_news"
+        tools:layout="@layout/fragment_hide_news" >
+        <action
+            android:id="@+id/action_hideNewsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_hideNewsFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
     </fragment>
 </navigation>

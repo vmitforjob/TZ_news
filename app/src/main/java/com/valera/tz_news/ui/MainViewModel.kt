@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.valera.tz_news.models.MyNews
-import com.valera.tz_news.models.RestData
 import com.valera.tz_news.repository.DBRepository
 import com.valera.tz_news.repository.NewsRepository
 import com.valera.tz_news.util.Coroutines
@@ -16,9 +15,7 @@ class MainViewModel(private val newsRepository: NewsRepository, private val dbRe
 
     private lateinit var job: Job
 
-    private val _news = MutableLiveData<Resource<RestData>>()
-    val news: LiveData<Resource<RestData>>
-        get() = _news
+    private var isLoad = false
 
     private val _newsDB = MutableLiveData<Resource<MutableList<MyNews>>>()
     val newsDB: LiveData<Resource<MutableList<MyNews>>>
@@ -29,19 +26,19 @@ class MainViewModel(private val newsRepository: NewsRepository, private val dbRe
     }
 
     fun getNewsApi() {
-        _news.postValue(Resource.Loading())
         job = Coroutines.ioThenMain(
             { handleNewsApiResponse() },
             {
                 when(it) {
                     is Resource.Success -> {
-                        _news.postValue(it)
-                        insertAllDB(it?.data?.data?.news!!)
+                        insertAllDB(it.data?.data?.news!!)
                     }
                 }
+                isLoad = true
             }
         )
     }
+
     private suspend fun handleNewsApiResponse() =
         try {
             Resource.Success(newsRepository.getNews().body()!!)
@@ -65,33 +62,15 @@ class MainViewModel(private val newsRepository: NewsRepository, private val dbRe
             { handleNewsDBResponse()},
             {
                 _newsDB.postValue(it)
-                if(it?.data?.isEmpty()!! && news.value?.message?.length == null)
+                if(it?.data?.isEmpty()!! && !isLoad)
                     getNewsApi()
             }
         )
     }
+
     private suspend fun handleNewsDBResponse() =
         try {
             Resource.Success(dbRepository.getNews())
-        } catch (t: Throwable) {
-            when (t) {
-                is IOException -> Resource.Error("DB Failure")
-                else -> Resource.Error("Conversion Error")
-            }
-        }
-
-    fun getHideNewsDB() {
-        _newsDB.postValue(Resource.Loading())
-        job = Coroutines.ioThenMain(
-            { handleHideNewsDBResponse()},
-            {
-                _newsDB.postValue(it)
-            }
-        )
-    }
-    private suspend fun handleHideNewsDBResponse() =
-        try {
-            Resource.Success(dbRepository.getHideNews())
         } catch (t: Throwable) {
             when (t) {
                 is IOException -> Resource.Error("DB Failure")
@@ -111,4 +90,5 @@ class MainViewModel(private val newsRepository: NewsRepository, private val dbRe
         super.onCleared()
         if(::job.isInitialized) job.cancel()
     }
+
 }

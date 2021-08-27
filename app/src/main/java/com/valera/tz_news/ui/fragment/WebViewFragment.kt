@@ -1,10 +1,8 @@
 package com.valera.tz_news.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
@@ -17,12 +15,8 @@ class WebViewFragment : Fragment(R.layout.fragment_web_view) {
     lateinit var newsUrl: String
     lateinit var webView: WebView
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        val view: View = inflater.inflate(R.layout.fragment_web_view, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
         actionBar?.setHomeButtonEnabled(true)
         actionBar?.setDisplayHomeAsUpEnabled(true)
@@ -35,7 +29,6 @@ class WebViewFragment : Fragment(R.layout.fragment_web_view) {
             loadUrl(newsUrl)
         }
 
-        return view
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
