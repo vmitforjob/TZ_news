@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Новости ЖКХ</string>
+    <string name="show_hidenews">Cкрытые новости</string>
+    <string name="show_opennews">Открытые новости</string>
+    <string name="update">Обновить</string>
+    <string name="search">Search</string>
+    <string name="txt_hide">Скрыть</string>
+    <string name="txt_open">Отображать</string>
+    <string name="txt_search_hint">"Нажмите здесь для поиска"</string>
 </resources>

@@ -18,6 +18,9 @@ interface DaoNews {
     @Query("DELETE FROM MyNews")
     suspend fun deleteAll()
 
-     @Query(value = "SELECT * FROM MyNews WHERE isHide = 0")
-    suspend fun getNews() : List<MyNews>
+    @Query(value = "SELECT * FROM MyNews WHERE isHide = 0")
+    suspend fun getNews() : MutableList<MyNews>
+
+    @Query(value = "SELECT * FROM MyNews WHERE isHide = 1")
+    suspend fun getHideNews() : MutableList<MyNews>
 }

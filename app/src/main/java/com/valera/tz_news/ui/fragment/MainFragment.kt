@@ -26,12 +26,14 @@ import com.valera.tz_news.util.Resource
 
 class MainFragment : Fragment(R.layout.fragment_main), RecyclerViewClickListener {
 
-    lateinit var recycler_view_news: RecyclerView
-    lateinit private var viewModel: MainViewModel
-    lateinit var newsAdapter: NewsAdapter
+    private lateinit var recycler_view_news: RecyclerView
+    private lateinit var viewModel: MainViewModel
+    private lateinit var newsAdapter: NewsAdapter
 
-    var lastOffset = 0
-    var lastPosition:Int = 0
+    private var lastOffset = 0
+    private var lastPosition:Int = 0
+
+    private var showHideNewsText = ""
 
     companion object {
         const val NEWS_URL = "NEWS_URL"
@@ -46,25 +48,29 @@ class MainFragment : Fragment(R.layout.fragment_main), RecyclerViewClickListener
         val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(false)
 
+        showHideNewsText = getString(R.string.show_hidenews)
+
         recycler_view_news = view.findViewById(R.id.recycler_view_news)
+        setupRecyclerView()
 
         val viewModelFactory = MainViewModelFactory(
             NewsRepository(ApiNews.invoke()),
             DBRepository(AppDataBase.invoke(requireContext()))
         )
-
         viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
-        viewModel.getNewsDB()
         viewModel.newsDB.observe(viewLifecycleOwner, { response ->
             when(response) {
                 is Resource.Success -> {
                     recycler_view_news.also {
-                        it.layoutManager = LinearLayoutManager(requireContext())
-                        it.setHasFixedSize(true)
-                        it.adapter = NewsAdapter(response.data!!, this)
-                        newsAdapter = it.adapter as NewsAdapter
-                        (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(lastPosition, lastOffset)
+                        newsAdapter.updateData(response.data!!)
                     }
+                    if (response.data?.isNotEmpty()!!) {
+                        if (response.data[0].isHide)
+                            showHideNewsText = getString(R.string.show_opennews)
+                        else
+                            showHideNewsText = getString(R.string.show_hidenews)
+                    }
+
                 }
                 is Resource.Error -> { }
                 is Resource.Loading -> { }
@@ -74,13 +80,12 @@ class MainFragment : Fragment(R.layout.fragment_main), RecyclerViewClickListener
 
     }
 
-    override fun onPause() {
-        super.onPause()
-        val  topView = (recycler_view_news.layoutManager as LinearLayoutManager).getChildAt(0)
-        if (topView != null)
-        {
-            lastOffset = topView.top
-            lastPosition = (recycler_view_news.layoutManager as LinearLayoutManager).getPosition(topView)
+    fun setupRecyclerView() {
+        recycler_view_news.also {
+            it.layoutManager = LinearLayoutManager(requireContext())
+            it.setHasFixedSize(true)
+            it.adapter = NewsAdapter(this)
+            newsAdapter = it.adapter as NewsAdapter
         }
     }
 
@@ -95,7 +100,7 @@ class MainFragment : Fragment(R.layout.fragment_main), RecyclerViewClickListener
                 )
             }
             R.id.butHide -> {
-                data.isHide = true
+                data.isHide = !data.isHide
                 viewModel.updata(data)
             }
         }
@@ -104,6 +109,17 @@ class MainFragment : Fragment(R.layout.fragment_main), RecyclerViewClickListener
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_update -> viewModel.getNewsApi()
+            R.id.show_hide -> {
+               if(showHideNewsText == getString(R.string.show_hidenews)) {
+                   viewModel.getHideNewsDB()
+                   item.title = getString(R.string.show_opennews)
+                   showHideNewsText = getString(R.string.show_opennews)
+                } else {
+                    viewModel.getNewsDB()
+                    item.title = getString(R.string.show_hidenews)
+                    showHideNewsText = getString(R.string.show_hidenews)
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -111,9 +127,11 @@ class MainFragment : Fragment(R.layout.fragment_main), RecyclerViewClickListener
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.action_menu, menu)
 
+        val itemHide = menu.findItem(R.id.show_hide)
+        itemHide.title = showHideNewsText
         val item = menu.findItem(R.id.action_search)
         val searchView = item?.actionView as SearchView
-        searchView.queryHint = "Нажмите здесь для поиска"
+        searchView.queryHint = getString(R.string.txt_search_hint)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false

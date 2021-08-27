@@ -1,6 +1,5 @@
 package com.valera.tz_news.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,10 +20,13 @@ class MainViewModel(private val newsRepository: NewsRepository, private val dbRe
     val news: LiveData<Resource<RestData>>
         get() = _news
 
-    private val _newsDB = MutableLiveData<Resource<List<MyNews>>>()
-    val newsDB: LiveData<Resource<List<MyNews>>>
+    private val _newsDB = MutableLiveData<Resource<MutableList<MyNews>>>()
+    val newsDB: LiveData<Resource<MutableList<MyNews>>>
         get() = _newsDB
 
+    init {
+        getNewsDB()
+    }
 
     fun getNewsApi() {
         _news.postValue(Resource.Loading())
@@ -61,7 +63,11 @@ class MainViewModel(private val newsRepository: NewsRepository, private val dbRe
         _newsDB.postValue(Resource.Loading())
         job = Coroutines.ioThenMain(
             { handleNewsDBResponse()},
-            { _newsDB.postValue(it) }
+            {
+                _newsDB.postValue(it)
+                if(it?.data?.isEmpty()!! && news.value?.message?.length == null)
+                    getNewsApi()
+            }
         )
     }
     private suspend fun handleNewsDBResponse() =
@@ -74,10 +80,29 @@ class MainViewModel(private val newsRepository: NewsRepository, private val dbRe
             }
         }
 
+    fun getHideNewsDB() {
+        _newsDB.postValue(Resource.Loading())
+        job = Coroutines.ioThenMain(
+            { handleHideNewsDBResponse()},
+            {
+                _newsDB.postValue(it)
+            }
+        )
+    }
+    private suspend fun handleHideNewsDBResponse() =
+        try {
+            Resource.Success(dbRepository.getHideNews())
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> Resource.Error("DB Failure")
+                else -> Resource.Error("Conversion Error")
+            }
+        }
+
     fun updata(news: MyNews) {
         job = Coroutines.ioThenMain(
             { dbRepository.update(news) },
-            { getNewsDB() }
+            {  }
         )
 
     }

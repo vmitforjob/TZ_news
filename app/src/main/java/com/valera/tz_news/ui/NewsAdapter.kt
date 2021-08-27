@@ -5,21 +5,19 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.valera.tz_news.R
 import com.valera.tz_news.databinding.ItemNewBinding
 import com.valera.tz_news.models.MyNews
 
 class NewsAdapter(
-    private val news: List<MyNews>,
     private val listener: RecyclerViewClickListener
 ) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>(), Filterable {
 
-    private var listFiltered: List<MyNews>
-
-    init {
-        listFiltered = news
-    }
+    var news: MutableList<MyNews> = mutableListOf()
+    var listFiltered: MutableList<MyNews> = mutableListOf()
 
     override fun getItemCount() = listFiltered.size
 
@@ -32,6 +30,7 @@ class NewsAdapter(
                 false
             )
         )
+
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         holder.recyclerviewNewsBinding.news = listFiltered[position]
@@ -46,7 +45,17 @@ class NewsAdapter(
                 holder.recyclerviewNewsBinding.butHide,
                 listFiltered[position]
             )
+            val pos = position
+            listFiltered.removeAt(pos)
+            notifyDataSetChanged()
         }
+
+    }
+
+    fun updateData(_News:MutableList<MyNews>) {
+        news = _News
+        listFiltered = news
+        notifyDataSetChanged()
     }
 
     inner class NewsViewHolder(
@@ -75,7 +84,7 @@ class NewsAdapter(
             }
 
             override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
-                listFiltered = filterResults.values as List<MyNews>
+                listFiltered = filterResults.values as MutableList<MyNews>
                 notifyDataSetChanged()
             }
         }
