@@ -1,8 +1,17 @@
 # TZ_news
 
-<img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182542_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182558_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182603_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182608_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182615_%20.jpg" width="240" height="500"/>   
+<img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210827-165125_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182558_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182603_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182608_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210816-182615_%20.jpg" width="240" height="500"/>   <img src="https://github.com/vmitforjob/TZ_news/blob/master/Screenshot_20210827-165134_%20.jpg" width="240" height="500"/>   
 
 # Необходимо реализовать одностраничное приложение, работающее по следующему принципу:
+
+## Добавлено:
+
+<dl>
+  <dt>Загрузка данных при первом открытии приложения </dt>
+  <dt>Возможность отображать(вернуть) скрытые новости </dt>
+  <dd>Перейти с помощью меню -> Скрытые новости -> Отображать</dd>
+  <dt>Адаптер создается один раз после обнавляются данные </dt>
+</dl>
 
 ## Оно должно получать список новостей с веб-сервиса.
 ### Реализовано с помощью -> Retrofit 2
